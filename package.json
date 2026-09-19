@@ -13,7 +13,7 @@
     "check": "npm run typecheck && npm test && npm run build"
   },
   "dependencies": {
-    "@actions/core": "^1.11.1",
+    "@actions/core": "^3.0.1",
     "@actions/github": "^6.0.1",
     "yaml": "^2.8.1"
   },
