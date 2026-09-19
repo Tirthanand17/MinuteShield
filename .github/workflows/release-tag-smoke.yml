@@ -1,0 +1,27 @@
+name: Release tag smoke test
+
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/release-tag-smoke.yml'
+
+permissions:
+  contents: read
+  actions: read
+  pull-requests: write
+
+concurrency:
+  group: release-tag-smoke-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+
+jobs:
+  smoke:
+    runs-on: ubuntu-slim
+    timeout-minutes: 5
+    steps:
+      - name: Run published MinuteShield tag
+        uses: Tirthanand17/MinuteShield@v0.1.0
+        with:
+          github-token: ${{ github.token }}
+          comment: 'true'
+          fail-on-policy: 'true'
