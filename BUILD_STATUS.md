@@ -1,55 +1,58 @@
 # Build status
 
-## Repository state
+## Current public state
 
-- Repository: `Tirthanand17/MinuteShield` — **private**.
-- Source, tests, research, architecture, static calculator site, CI, lockfile, and compiled Action bundle are committed on `main`.
-- `action.yml` uses the GitHub Actions Node 24 runtime and points to the committed `dist/index.js` bundle.
-- The executable placeholder install example was removed from `.github/workflows/`; the copy-paste example now lives at `docs/install-example.yml`.
+- Repository: `Tirthanand17/MinuteShield` — **public**.
+- GitHub Marketplace listing — **live**: https://github.com/marketplace/actions/minuteshield
+- GitHub Pages site — **live**: https://tirthanand17.github.io/MinuteShield/
+- Current patch release: **v0.1.1**.
+- Release commit: `b65eaf304285da7effd3762b19fe6f66d28f838b`.
+- Tags `v0.1.1`, `v0.1`, and `v0` all point to that verified commit.
+- `action.yml` uses the GitHub Actions Node 24 runtime and the committed `dist/index.js` bundle.
 
-## Authoritative GitHub CI validation
+## Authoritative CI validation
 
-The GitHub-hosted Node 24 pipeline completed successfully after the repository upload:
+The v0.1.1 source path passed the GitHub-hosted Node 24 pipeline:
 
-- `npm install --no-audit --no-fund` — **PASS**
+- dependency install — **PASS**
 - TypeScript `tsc --noEmit` — **PASS**
-- Vitest — **3 files / 8 tests PASS**
+- Vitest — **3 files / 10 tests PASS**
 - NCC production build — **PASS**
-- `dist/index.js` non-empty release-bundle verification — **PASS**
-- Verified bundle + `package-lock.json` persisted to `main` — **PASS** (`chore: refresh action bundle`, commit `c4d537f33442fe8a0af5a7b3b72463fbf0ed1d9b`)
+- non-empty `dist/index.js` verification — **PASS**
+- generated bundle + lockfile persisted to `main` — **PASS**
+- dedicated Release verification workflow on release commit — **PASS** (run `35453450672`)
 
-An earlier pipeline failed only while uploading an Actions artifact because the account artifact-storage quota was full. The tests and NCC build had already passed in that run. CI was changed to persist the verified bundle directly in Git instead, removing that quota dependency.
+## v0.1.1 accuracy regression validation
 
-## End-to-end pull-request validation
+The first public demo exposed a new-workflow estimation issue in v0.1.0: PR-only execution history could make a brand-new workflow appear much cheaper than the configured fallback assumptions.
 
-A controlled private PR (`#1`, now closed without merge) added an intentionally expensive macOS workflow fixture. The actual job was changed to `if: ${{ false }}` so it could be priced without consuming macOS runner minutes on the final test revision.
+v0.1.1 fixes this by ignoring history when the workflow is absent from the trusted base branch. New scheduled workflows also cannot be estimated below their statically observable cron frequency.
 
-Results:
+A separate public regression PR in `Tirthanand17/MinuteShield-demo` reused the same contaminated workflow path:
 
-- MinuteShield self-test workflow — **PASS** (run `35448342033`).
-- Full source/type/test/build CI on the PR — **PASS** (run `35448341965`).
-- Expensive runtime fixture on final revision — **SKIPPED intentionally**.
-- Sticky `github-actions[bot]` PR comment — **PASS**.
-- `macos-runner` finding — **PASS**.
-- `missing-cancel-in-progress` finding — **PASS**.
-- Before/after monthly cost report and estimated delta — **PASS**.
-- Sticky-comment update after a new PR commit — **PASS** (same comment updated rather than duplicated).
+- Action under test: `Tirthanand17/MinuteShield@v0.1.1`.
+- Expensive macOS fixture runtime: **SKIPPED intentionally** with `if: ${{ false }}`.
+- Estimated monthly delta: **+$74.40**.
+- Estimated runs/day: **5.00**.
+- Warning threshold crossed: **PASS**.
+- $50 fail threshold crossed: **PASS**; the MinuteShield check failed intentionally because policy enforcement worked.
+- Findings included `macos-runner`, `missing-timeout`, and `missing-cancel-in-progress`.
+- Demo PR closed without merge after validation.
 
-The temporary PR was closed without merging the fixture.
-
-## Security properties validated by design
+## Security properties
 
 - Pull-request workflow YAML is fetched and parsed as data; MinuteShield does not execute code from the workflow being analyzed.
 - Policy is read from the trusted base SHA so a PR cannot raise its own budget threshold.
-- The self-test invokes `Tirthanand17/MinuteShield@main`, keeping Action code separate from the untrusted PR branch.
-- Comment failures remain non-fatal for restricted fork-token scenarios; the job summary remains available.
+- Recommended installation uses `pull_request`, not `pull_request_target`.
+- Restricted comment permissions remain non-fatal; the job summary is still available.
+- Release-specific tag `v0.1.1` is tied to the verified bundle commit; compatibility tags `v0` and `v0.1` track the current compatible patch.
 
-## Remaining pre-public-release work
+## Post-launch measurement
 
-1. Decide the public-release repository/visibility strategy; GitHub Marketplace Actions must be distributed from a public repository.
-2. Create release tag/version `v0.1.0` after final release metadata review.
-3. Replace documentation placeholders with the final public repository slug/version.
-4. Publish the static calculator/landing site and add the production domain when chosen.
-5. Publish the Marketplace listing only after the public-release visibility change is explicitly approved.
+A true zero-point baseline was recorded immediately after launch in `docs/POST_LAUNCH_BASELINE.md`: 0 stars, 0 forks, 0 traffic views, 0 clones, and no external referrers at capture time. Future adoption should be measured against that baseline rather than inferred from launch activity.
 
-**Private MVP status: BUILT + CI GREEN + END-TO-END PR VALIDATED.**
+## Known maintenance follow-up
+
+Issue `#18` tracks GitHub Pages helper actions that currently emit a Node 20 deprecation warning while still deploying successfully. This is not a current outage.
+
+**Current status: PUBLIC + MARKETPLACE LIVE + v0.1.1 VERIFIED + SECOND-REPOSITORY REGRESSION PASSED.**
