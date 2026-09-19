@@ -1,0 +1,21 @@
+name: MinuteShield self-test
+on:
+  pull_request:
+    paths:
+      - '.github/workflows/**'
+permissions:
+  contents: read
+  actions: read
+  pull-requests: write
+concurrency:
+  group: minuteshield-self-test-${{ github.event.pull_request.number }}
+  cancel-in-progress: true
+jobs:
+  cost-guard:
+    runs-on: ubuntu-slim
+    timeout-minutes: 5
+    steps:
+      - uses: Tirthanand17/MinuteShield@main
+        with:
+          github-token: ${{ github.token }}
+          fail-on-policy: 'false'
