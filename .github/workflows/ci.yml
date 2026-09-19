@@ -4,7 +4,7 @@ on:
     branches: [main]
   pull_request:
 permissions:
-  contents: read
+  contents: write
 concurrency:
   group: minuteshield-ci-${{ github.ref }}
   cancel-in-progress: true
@@ -19,8 +19,17 @@ jobs:
           node-version: 24
       - run: npm install --no-audit --no-fund
       - run: npm run check
-      - uses: actions/upload-artifact@v7
-        with:
-          name: minuteshield-dist
-          path: dist/
-          if-no-files-found: error
+      - name: Verify release bundle
+        run: test -s dist/index.js
+      - name: Commit generated bundle and lockfile
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -f dist/index.js dist/package.json package-lock.json
+          if git diff --cached --quiet; then
+            echo "Generated bundle is already current."
+            exit 0
+          fi
+          git commit -m "chore: refresh action bundle"
+          git push
