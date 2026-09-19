@@ -1,6 +1,6 @@
 {
   "name": "minuteshield",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Pre-merge GitHub Actions cost guard: estimate CI spend changes before workflow changes land.",
   "private": true,
   "type": "module",

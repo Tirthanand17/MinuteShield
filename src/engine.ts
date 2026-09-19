@@ -1,6 +1,6 @@
 import { inspectWorkflow } from './findings.js';
 import type { AnalysisResult, MinuteShieldConfig, WorkflowHistory, WorkflowPair } from './types.js';
-import { estimateWorkflow, parseWorkflow, triggerLoad } from './workflow.js';
+import { estimateWorkflow, parseWorkflow, scheduleRunsPerDay, triggerLoad } from './workflow.js';
 
 export function analyzeWorkflows(
   pairs: WorkflowPair[],
@@ -29,13 +29,24 @@ export function analyzeWorkflows(
     if (pair.headText) {
       try {
         headDoc = parseWorkflow(pair.headText);
-        let headRunsPerDay = history?.runsPerDay ?? config.estimation.defaultRunsPerDay;
+
+        // History is trustworthy only when the workflow already exists on the base branch.
+        // A brand-new workflow can accumulate tiny PR-only history before MinuteShield runs;
+        // using that data would systematically understate both runtime and run frequency.
+        const headHistory = baseDoc ? history : undefined;
+        let headRunsPerDay = config.estimation.defaultRunsPerDay;
+
         if (baseDoc && history?.runsPerDay != null) {
           const baseLoad = Math.max(0.25, triggerLoad(baseDoc));
           const headLoad = Math.max(0.25, triggerLoad(headDoc));
           headRunsPerDay = history.runsPerDay * (headLoad / baseLoad);
+        } else if (!baseDoc) {
+          // For a new scheduled workflow, never estimate fewer runs than the statically
+          // observable cron frequency. Non-schedule triggers still use the configured fallback.
+          headRunsPerDay = Math.max(headRunsPerDay, scheduleRunsPerDay(headDoc));
         }
-        after = estimateWorkflow(pair.path, headDoc, config, history, headRunsPerDay);
+
+        after = estimateWorkflow(pair.path, headDoc, config, headHistory, headRunsPerDay);
         findings.push(...inspectWorkflow(pair.path, pair.headText, after, config));
       } catch (error) {
         findings.push({
