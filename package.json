@@ -1,0 +1,26 @@
+{
+  "name": "minuteshield",
+  "version": "0.1.0",
+  "description": "Pre-merge GitHub Actions cost guard: estimate CI spend changes before workflow changes land.",
+  "private": true,
+  "type": "module",
+  "engines": { "node": ">=24" },
+  "scripts": {
+    "build": "ncc build src/index.ts -o dist --minify",
+    "typecheck": "tsc --noEmit",
+    "test": "vitest run",
+    "test:watch": "vitest",
+    "check": "npm run typecheck && npm test && npm run build"
+  },
+  "dependencies": {
+    "@actions/core": "^1.11.1",
+    "@actions/github": "^6.0.1",
+    "yaml": "^2.8.1"
+  },
+  "devDependencies": {
+    "@types/node": "^24.3.1",
+    "@vercel/ncc": "^0.38.3",
+    "typescript": "^5.9.2",
+    "vitest": "^3.2.4"
+  }
+}

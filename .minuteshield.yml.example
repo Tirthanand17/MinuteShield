@@ -1,0 +1,17 @@
+version: 1
+estimation:
+  defaultJobMinutes: 8
+  defaultRunsPerDay: 5
+  historyDays: 30
+  historyRunLimit: 100
+policy:
+  warnMonthlyDeltaUsd: 10
+  failMonthlyDeltaUsd: 50
+  requireTimeoutMinutes: true
+  requireConcurrencyCancel: true
+  maxMatrixJobs: 24
+  maxScheduleRunsPerDay: 24
+  warnOnMacos: true
+  warnOnWindows: false
+comment: true
+customRunnerRates: {}

@@ -1,0 +1,26 @@
+name: MinuteShield CI
+on:
+  push:
+    branches: [main]
+  pull_request:
+permissions:
+  contents: read
+concurrency:
+  group: minuteshield-ci-${{ github.ref }}
+  cancel-in-progress: true
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 24
+      - run: npm install --no-audit --no-fund
+      - run: npm run check
+      - uses: actions/upload-artifact@v7
+        with:
+          name: minuteshield-dist
+          path: dist/
+          if-no-files-found: error

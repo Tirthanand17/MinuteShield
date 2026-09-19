@@ -1,0 +1,34 @@
+name: MinuteShield
+description: Predict the GitHub Actions cost impact of workflow changes before they merge.
+author: MinuteShield
+branding:
+  icon: shield
+  color: green
+inputs:
+  github-token:
+    description: GitHub token used to read workflow history and post/update the PR comment.
+    required: true
+  config-path:
+    description: Repository-relative MinuteShield configuration path.
+    required: false
+    default: .minuteshield.yml
+  comment:
+    description: Post or update a pull-request comment when permissions allow.
+    required: false
+    default: 'true'
+  fail-on-policy:
+    description: Fail the check when the configured monthly cost delta limit is exceeded.
+    required: false
+    default: 'true'
+outputs:
+  monthly-delta-usd:
+    description: Estimated monthly GitHub Actions cost change in USD.
+  before-monthly-usd:
+    description: Estimated monthly cost before the PR.
+  after-monthly-usd:
+    description: Estimated monthly cost after the PR.
+  findings-count:
+    description: Number of cost/reliability findings.
+runs:
+  using: node24
+  main: dist/index.js
