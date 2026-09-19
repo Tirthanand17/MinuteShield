@@ -1,0 +1,36 @@
+name: Feature request
+description: Suggest an improvement tied to a concrete CI-cost or workflow-governance problem.
+title: "feature: "
+labels:
+  - enhancement
+body:
+  - type: markdown
+    attributes:
+      value: |
+        The most useful requests describe the underlying workflow/cost problem before proposing a solution.
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem
+      description: What recurring GitHub Actions cost, reliability or governance problem are you trying to solve?
+    validations:
+      required: true
+  - type: textarea
+    id: current
+    attributes:
+      label: Current workaround
+      description: How do you handle this today, if at all?
+  - type: textarea
+    id: outcome
+    attributes:
+      label: Desired outcome
+      description: What should MinuteShield be able to report, detect or enforce?
+    validations:
+      required: true
+  - type: checkboxes
+    id: scope
+    attributes:
+      label: Scope
+      options:
+        - label: This is based on a real workflow/use case rather than a hypothetical feature list.
+          required: true
