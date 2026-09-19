@@ -1,6 +1,6 @@
 name: MinuteShield
-description: Predict the GitHub Actions cost impact of workflow changes before they merge.
-author: MinuteShield
+description: Estimate GitHub Actions cost changes in pull requests and block CI spend regressions before merge.
+author: Tirthanand17
 branding:
   icon: shield
   color: green
