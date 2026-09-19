@@ -1,0 +1,61 @@
+name: Bug report
+description: Report reproducible incorrect behavior in MinuteShield.
+title: "bug: "
+labels:
+  - bug
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for helping improve MinuteShield. Please remove repository secrets, tokens, private workflow contents, and other sensitive data before posting.
+  - type: input
+    id: version
+    attributes:
+      label: MinuteShield version
+      description: Tag or exact commit SHA used by the workflow.
+      placeholder: v0.1.0
+    validations:
+      required: true
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options:
+        - Cost estimate
+        - Workflow parsing
+        - PR comment
+        - Policy enforcement
+        - Workflow history calibration
+        - Installation / permissions
+        - Other
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected behavior
+      description: What did you expect MinuteShield to report or do?
+    validations:
+      required: true
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual behavior
+      description: What happened instead? Include sanitized logs or a minimal workflow example when useful.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Minimal reproduction
+      description: Provide the smallest non-sensitive workflow/config example that reproduces the problem.
+      render: yaml
+  - type: checkboxes
+    id: checks
+    attributes:
+      label: Checks
+      options:
+        - label: I removed tokens, secrets and private repository data from this report.
+          required: true
+        - label: I checked the FAQ and existing issues for the same problem.
+          required: true
