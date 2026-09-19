@@ -6,13 +6,15 @@
   <title>MinuteShield — GitHub Actions Cost Calculator & PR Cost Guard</title>
   <meta name="description" content="Estimate GitHub Actions workflow cost, compare Linux/Windows/macOS runner spend, and catch CI cost regressions before pull requests merge." />
   <meta name="robots" content="index,follow" />
+  <link rel="canonical" href="https://tirthanand17.github.io/MinuteShield/" />
   <meta property="og:type" content="website" />
+  <meta property="og:url" content="https://tirthanand17.github.io/MinuteShield/" />
   <meta property="og:title" content="MinuteShield — GitHub Actions Cost Guard" />
   <meta property="og:description" content="Put a dollar sign on GitHub Actions workflow changes before they merge." />
   <meta name="twitter:card" content="summary" />
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"MinuteShield","applicationCategory":"DeveloperApplication","operatingSystem":"GitHub Actions","description":"Estimate GitHub Actions workflow cost changes in pull requests and catch CI spend regressions before merge.","isAccessibleForFree":true}</script>
+  <script type="application/ld+json">{"@context":"https://schema.org","@type":"SoftwareApplication","name":"MinuteShield","applicationCategory":"DeveloperApplication","operatingSystem":"GitHub Actions","url":"https://tirthanand17.github.io/MinuteShield/","description":"Estimate GitHub Actions workflow cost changes in pull requests and catch CI spend regressions before merge.","isAccessibleForFree":true}</script>
   <style>
-    :root{font-family:Inter,ui-sans-serif,system-ui,sans-serif;color:#e8edf2;background:#0a0f14}*{box-sizing:border-box}body{margin:0}a{color:#9dd7ff}main{max-width:1040px;margin:auto;padding:56px 20px 90px}.pill{display:inline-block;border:1px solid #2b3946;border-radius:999px;padding:8px 12px;color:#b9c7d4}.hero{padding:54px 0 34px}.hero h1{font-size:clamp(42px,8vw,78px);line-height:.95;letter-spacing:-.055em;margin:18px 0}.hero p{max-width:760px;font-size:20px;line-height:1.55;color:#aab7c4}.cta{display:inline-block;margin-top:10px;padding:12px 16px;border:1px solid #3b4f60;border-radius:12px;text-decoration:none;font-weight:650}.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;margin-top:38px}.card{background:#101820;border:1px solid #24313c;border-radius:20px;padding:24px}.card h2{margin-top:0;font-size:22px}label{display:block;color:#b8c3ce;font-size:14px;margin:16px 0 7px}input,select{width:100%;background:#0b1117;color:#edf3f8;border:1px solid #33414d;border-radius:10px;padding:12px;font-size:16px}.result{font-size:48px;font-weight:750;letter-spacing:-.04em;margin:14px 0 6px}.muted{color:#8fa0af;line-height:1.5}.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px}.fact{padding:18px;border:1px solid #24313c;border-radius:16px}.fact b{display:block;font-size:24px}.code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#070b0f;border-radius:12px;padding:16px;overflow:auto;color:#c8f7d4}footer{margin-top:52px;color:#778998;font-size:14px}@media(max-width:760px){.grid,.facts{grid-template-columns:1fr}.hero{padding-top:34px}}
+    :root{font-family:Inter,ui-sans-serif,system-ui,sans-serif;color:#e8edf2;background:#0a0f14}*{box-sizing:border-box}body{margin:0}a{color:#9dd7ff}main{max-width:1040px;margin:auto;padding:56px 20px 90px}.pill{display:inline-block;border:1px solid #2b3946;border-radius:999px;padding:8px 12px;color:#b9c7d4}.hero{padding:54px 0 34px}.hero h1{font-size:clamp(42px,8vw,78px);line-height:.95;letter-spacing:-.055em;margin:18px 0}.hero p{max-width:760px;font-size:20px;line-height:1.55;color:#aab7c4}.cta{display:inline-block;margin-top:10px;padding:12px 16px;border:1px solid #3b4f60;border-radius:12px;text-decoration:none;font-weight:650}.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;margin-top:38px}.card{background:#101820;border:1px solid #24313c;border-radius:20px;padding:24px}.card h2{margin-top:0;font-size:22px}label{display:block;color:#b8c3ce;font-size:14px;margin:16px 0 7px}input,select{width:100%;background:#0b1117;color:#edf3f8;border:1px solid #33414d;border-radius:10px;padding:12px;font-size:16px}.result{font-size:48px;font-weight:750;letter-spacing:-.04em;margin:14px 0 6px}.muted{color:#8fa0af;line-height:1.5}.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px}.fact{padding:18px;border:1px solid #24313c;border-radius:16px}.fact b{display:block;font-size:24px}.code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#070b0f;border-radius:12px;padding:16px;overflow:auto;color:#c8f7d4}.learn a{display:block;margin:10px 0;text-decoration:none}footer{margin-top:52px;color:#778998;font-size:14px}@media(max-width:760px){.grid,.facts{grid-template-columns:1fr}.hero{padding-top:34px}}
   </style>
 </head>
 <body><main>
@@ -56,6 +58,12 @@
   with:
     github-token: ${{ github.token }}</pre>
     <p class="muted">The free Action is designed for self-serve adoption. Organization-wide policy and reporting can become the paid cloud tier later.</p>
+  </section>
+  <section class="card learn" style="margin-top:24px">
+    <h2>Learn how GitHub Actions cost works</h2>
+    <a href="github-actions-cost-calculator.html">GitHub Actions cost calculator: formula, rates and examples →</a>
+    <a href="github-actions-macos-vs-linux-cost.html">macOS vs Linux GitHub Actions cost comparison →</a>
+    <a href="reduce-github-actions-cost.html">Practical ways to reduce GitHub Actions cost →</a>
   </section>
   <footer>Rates shown are baseline GitHub-hosted runner rates verified against GitHub documentation in September 2026. GitHub rounds job time to whole minutes for billing. Actual spend can differ because of included minutes, enterprise arrangements, larger runners, taxes, and future pricing changes.</footer>
 </main>
