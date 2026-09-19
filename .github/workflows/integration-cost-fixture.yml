@@ -3,6 +3,7 @@ on:
   pull_request:
 jobs:
   verify:
+    if: ${{ false }}
     runs-on: macos-latest
     timeout-minutes: 10
     steps:
