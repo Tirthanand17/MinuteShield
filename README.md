@@ -3,6 +3,10 @@
 MinuteShield is a preventive GitHub Actions cost guard. It reviews pull requests that change workflow YAML, estimates the before/after monthly runner cost, flags common CI-minute waste, and can block cost regressions before merge.
 
 [![CI](https://github.com/Tirthanand17/MinuteShield/actions/workflows/ci.yml/badge.svg)](https://github.com/Tirthanand17/MinuteShield/actions/workflows/ci.yml)
+[![GitHub Marketplace](https://img.shields.io/badge/GitHub%20Marketplace-MinuteShield-blue?logo=github)](https://github.com/marketplace/actions/minuteshield)
+
+**Marketplace:** https://github.com/marketplace/actions/minuteshield  
+**Live calculator/site:** https://tirthanand17.github.io/MinuteShield/
 
 ## Why MinuteShield
 
@@ -22,7 +26,7 @@ GitHub Actions cost problems are often discovered after usage has already accumu
 
 ## Install
 
-Add this workflow to the repository you want to protect:
+Install from the [GitHub Marketplace](https://github.com/marketplace/actions/minuteshield), or add this workflow to the repository you want to protect:
 
 ```yaml
 name: CI cost guard
@@ -80,7 +84,7 @@ The JavaScript Action bundle is generated into `dist/` with `@vercel/ncc` and co
 
 ## Release status
 
-The private MVP has passed unit tests, production bundling, GitHub-hosted CI, and an end-to-end pull-request integration test. See [`BUILD_STATUS.md`](BUILD_STATUS.md) and [`CHANGELOG.md`](CHANGELOG.md).
+MinuteShield v0.1.0 is publicly released, published on GitHub Marketplace, live on GitHub Pages, and validated from a separate public demo repository. See [`BUILD_STATUS.md`](BUILD_STATUS.md), [`CHANGELOG.md`](CHANGELOG.md), and the [demo repository](https://github.com/Tirthanand17/MinuteShield-demo).
 
 ## Product direction
 
