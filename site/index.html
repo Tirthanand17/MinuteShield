@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>MinuteShield — GitHub Actions Cost Guard</title>
+  <meta name="description" content="Estimate GitHub Actions workflow cost and catch CI spend regressions before they merge." />
+  <style>
+    :root{font-family:Inter,ui-sans-serif,system-ui,sans-serif;color:#e8edf2;background:#0a0f14}*{box-sizing:border-box}body{margin:0}main{max-width:1040px;margin:auto;padding:56px 20px 90px}.pill{display:inline-block;border:1px solid #2b3946;border-radius:999px;padding:8px 12px;color:#b9c7d4}.hero{padding:54px 0 34px}.hero h1{font-size:clamp(42px,8vw,78px);line-height:.95;letter-spacing:-.055em;margin:18px 0}.hero p{max-width:720px;font-size:20px;line-height:1.55;color:#aab7c4}.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:24px;margin-top:38px}.card{background:#101820;border:1px solid #24313c;border-radius:20px;padding:24px}.card h2{margin-top:0;font-size:22px}label{display:block;color:#b8c3ce;font-size:14px;margin:16px 0 7px}input,select{width:100%;background:#0b1117;color:#edf3f8;border:1px solid #33414d;border-radius:10px;padding:12px;font-size:16px}.result{font-size:48px;font-weight:750;letter-spacing:-.04em;margin:14px 0 6px}.muted{color:#8fa0af;line-height:1.5}.facts{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:24px}.fact{padding:18px;border:1px solid #24313c;border-radius:16px}.fact b{display:block;font-size:24px}.code{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;background:#070b0f;border-radius:12px;padding:16px;overflow:auto;color:#c8f7d4}footer{margin-top:52px;color:#778998;font-size:14px}@media(max-width:760px){.grid,.facts{grid-template-columns:1fr}.hero{padding-top:34px}}
+  </style>
+</head>
+<body><main>
+  <span class="pill">Prevent CI cost regressions before merge</span>
+  <section class="hero">
+    <h1>Put a dollar sign<br/>on workflow changes.</h1>
+    <p>MinuteShield estimates the monthly GitHub Actions cost impact of a pull request, calibrates with recent runtime history, and can block expensive workflow changes before they reach <code>main</code>.</p>
+  </section>
+  <section class="grid">
+    <div class="card">
+      <h2>GitHub Actions monthly cost calculator</h2>
+      <label for="runner">Runner</label>
+      <select id="runner">
+        <option value="0.002">Linux 1-core / ubuntu-slim — $0.002/min</option>
+        <option value="0.006" selected>Linux 2-core x64 — $0.006/min</option>
+        <option value="0.005">Linux 2-core arm64 — $0.005/min</option>
+        <option value="0.010">Windows 2-core — $0.010/min</option>
+        <option value="0.062">macOS standard — $0.062/min</option>
+      </select>
+      <label for="minutes">Average billable minutes per job</label><input id="minutes" type="number" min="1" value="8" />
+      <label for="runs">Workflow runs per day</label><input id="runs" type="number" min="0" step="0.1" value="10" />
+      <label for="matrix">Matrix/job copies per run</label><input id="matrix" type="number" min="1" value="1" />
+    </div>
+    <div class="card">
+      <h2>Projected variable runner cost</h2>
+      <div class="result" id="monthly">$14.40</div>
+      <div class="muted" id="detail"></div>
+      <hr style="border:0;border-top:1px solid #25323d;margin:22px 0"/>
+      <p class="muted">MinuteShield uses this pricing model inside PR review, then improves the estimate with the repository's recent workflow frequency and job runtime history.</p>
+    </div>
+  </section>
+  <section class="facts">
+    <div class="fact"><b>Before → after</b><span class="muted">Review the monthly delta, not only YAML.</span></div>
+    <div class="fact"><b>Base policy</b><span class="muted">PRs cannot raise their own budget threshold.</span></div>
+    <div class="fact"><b>No PR code</b><span class="muted">Workflow files are parsed as data, not executed.</span></div>
+  </section>
+  <section class="card" style="margin-top:24px">
+    <h2>Planned Marketplace install</h2>
+    <pre class="code">- uses: YOUR_ORG/minuteshield@v1
+  with:
+    github-token: ${{ github.token }}</pre>
+    <p class="muted">The free Action is the self-serve acquisition layer. Organization-wide policy and reporting can become the paid cloud tier later.</p>
+  </section>
+  <footer>Rates shown are baseline GitHub-hosted runner rates documented for September 2026. Actual billing can differ because of included minutes, enterprise arrangements, larger runners, taxes, and future pricing changes.</footer>
+</main>
+<script>
+const $=id=>document.getElementById(id);function calc(){const r=+$('runner').value,m=Math.max(1,Math.ceil(+$('minutes').value||1)),d=Math.max(0,+$('runs').value||0),x=Math.max(1,+$('matrix').value||1);const monthly=r*m*d*x*30;$('monthly').textContent='$'+monthly.toFixed(2);$('detail').textContent=`${m} billed min × ${d} runs/day × ${x} copies × 30 days × $${r.toFixed(3)}/min`;}['runner','minutes','runs','matrix'].forEach(id=>$(id).addEventListener('input',calc));calc();
+</script></body></html>

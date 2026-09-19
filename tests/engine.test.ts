@@ -1,0 +1,53 @@
+import { describe, expect, it } from 'vitest';
+import { DEFAULT_CONFIG } from '../src/config.js';
+import { analyzeWorkflows } from '../src/engine.js';
+
+const base = `
+name: CI
+on:
+  pull_request:
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    steps:
+      - run: npm test
+`;
+
+const expensive = `
+name: CI
+on:
+  pull_request:
+jobs:
+  lint:
+    runs-on: macos-latest
+    timeout-minutes: 10
+    steps:
+      - run: npm test
+`;
+
+describe('analysis engine', () => {
+  it('detects a meaningful monthly runner-cost regression', () => {
+    const result = analyzeWorkflows(
+      [{ path: '.github/workflows/ci.yml', baseText: base, headText: expensive }],
+      DEFAULT_CONFIG,
+      { '.github/workflows/ci.yml': { runsPerDay: 10, medianJobMinutes: 5, samples: 30 } }
+    );
+    expect(result.beforeMonthlyUsd).toBeCloseTo(9, 4);
+    expect(result.afterMonthlyUsd).toBeCloseTo(93, 4);
+    expect(result.monthlyDeltaUsd).toBeCloseTo(84, 4);
+    expect(result.policyBreached).toBe(true);
+    expect(result.findings.some((f) => f.code === 'macos-runner')).toBe(true);
+  });
+
+  it('uses trusted thresholds from config', () => {
+    const config = structuredClone(DEFAULT_CONFIG);
+    config.policy.failMonthlyDeltaUsd = 100;
+    const result = analyzeWorkflows(
+      [{ path: '.github/workflows/ci.yml', baseText: base, headText: expensive }],
+      config,
+      { '.github/workflows/ci.yml': { runsPerDay: 10, medianJobMinutes: 5, samples: 30 } }
+    );
+    expect(result.policyBreached).toBe(false);
+  });
+});
