@@ -23,6 +23,7 @@ GitHub Actions cost problems are often discovered after usage has already accumu
 - Posts an idempotent PR comment and a GitHub Actions job summary.
 - Enforces trusted policy thresholds from the **base branch** `.minuteshield.yml`.
 - Falls back to configurable assumptions when history is sparse or unavailable.
+- For brand-new workflows, ignores PR-only execution history and uses trusted fallback assumptions; scheduled workflows are never estimated below their observable cron frequency.
 
 ## Install
 
@@ -45,12 +46,12 @@ jobs:
     runs-on: ubuntu-slim
     timeout-minutes: 5
     steps:
-      - uses: Tirthanand17/MinuteShield@v0.1.0
+      - uses: Tirthanand17/MinuteShield@v0
         with:
           github-token: ${{ github.token }}
 ```
 
-Copy `.minuteshield.yml.example` to `.minuteshield.yml` if you want custom warning/fail thresholds. For stricter supply-chain controls, pin the action to an immutable commit SHA instead of a moving version reference.
+`v0` tracks the latest compatible v0 release; the current patch is `v0.1.1`. Copy `.minuteshield.yml.example` to `.minuteshield.yml` if you want custom warning/fail thresholds. For stricter supply-chain controls, pin the action to an immutable full commit SHA instead of a moving version tag.
 
 ## Outputs
 
@@ -63,7 +64,7 @@ Copy `.minuteshield.yml.example` to `.minuteshield.yml` if you want custom warni
 
 ## Estimation model
 
-MinuteShield combines runner USD/minute × rounded historical job duration × matrix copies × estimated runs/day × 30. Recent workflow history is preferred; new workflows use configured fallback values. Trigger changes can scale historical frequency, and simple cron schedules are evaluated statically.
+MinuteShield combines runner USD/minute × rounded historical job duration × matrix copies × estimated runs/day × 30. Recent workflow history is preferred for workflows that already exist on the trusted base branch; new workflows use configured fallback values. Trigger changes can scale historical frequency, and simple cron schedules are evaluated statically.
 
 The result is a **preventive estimate, not an invoice**. Included plan minutes, dynamic matrices, conditional jobs, custom/self-hosted economics, enterprise arrangements, taxes, and future GitHub pricing can make billed spend differ.
 
@@ -84,7 +85,7 @@ The JavaScript Action bundle is generated into `dist/` with `@vercel/ncc` and co
 
 ## Release status
 
-MinuteShield v0.1.0 is publicly released, published on GitHub Marketplace, live on GitHub Pages, and validated from a separate public demo repository. See [`BUILD_STATUS.md`](BUILD_STATUS.md), [`CHANGELOG.md`](CHANGELOG.md), and the [demo repository](https://github.com/Tirthanand17/MinuteShield-demo).
+MinuteShield v0.1.1 is publicly released. Its new-workflow accuracy fix was validated from the separate public [demo repository](https://github.com/Tirthanand17/MinuteShield-demo) using the same workflow path that exposed the v0.1.0 underestimation: the estimate increased from about $1.98/month to $74.40/month and correctly crossed the configured $50 policy threshold while the macOS fixture itself remained skipped. See [`BUILD_STATUS.md`](BUILD_STATUS.md) and [`CHANGELOG.md`](CHANGELOG.md).
 
 ## Product direction
 
