@@ -71,9 +71,13 @@ describe('analysis engine', () => {
       { '.github/workflows/new.yml': { runsPerDay: 0.03, medianJobMinutes: 1, samples: 1 } }
     );
 
+    const after = result.workflows[0]?.after;
+    expect(after).toBeTruthy();
+    if (!after) throw new Error('expected an after estimate for new workflow');
+
     expect(result.afterMonthlyUsd).toBeCloseTo(74.4, 4);
-    expect(result.workflows[0].after?.runsPerDay).toBe(5);
-    expect(result.workflows[0].after?.jobs[0].estimatedMinutes).toBe(8);
+    expect(after.runsPerDay).toBe(5);
+    expect(after.jobs[0]?.estimatedMinutes).toBe(8);
     expect(result.policyBreached).toBe(true);
   });
 
@@ -84,8 +88,12 @@ describe('analysis engine', () => {
       { '.github/workflows/scheduled.yml': { runsPerDay: 0.03, medianJobMinutes: 1, samples: 1 } }
     );
 
-    expect(result.workflows[0].after?.runsPerDay).toBe(48);
-    expect(result.workflows[0].after?.jobs[0].estimatedMinutes).toBe(8);
+    const after = result.workflows[0]?.after;
+    expect(after).toBeTruthy();
+    if (!after) throw new Error('expected an after estimate for scheduled workflow');
+
+    expect(after.runsPerDay).toBe(48);
+    expect(after.jobs[0]?.estimatedMinutes).toBe(8);
     expect(result.afterMonthlyUsd).toBeCloseTo(69.12, 4);
   });
 });
